@@ -1,0 +1,29 @@
+#Almond Yield Sensitivity 
+
+##Call the almond profit model
+```{r}
+source("../profit_model.R")
+profit_model
+
+```
+
+
+##Do a simple informal sensitivity analysis of almond yield profit using at least 2 parameters
+```{r}
+
+```
+
+##Create 2 graphs of the results - you can decide what is the most meaningful graph 
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+##Results
+Write a short paragraph (in the Rmarkdown document) to summarize you interpretation of your model results (e.g what do 'take away' from your model and sensitivity analysis)
+

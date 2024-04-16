@@ -2,7 +2,7 @@
 
 ##Call the almond profit model
 ```{r}
-source("../profit_model.R")
+source("profit_model.R")
 profit_model
 
 ```
@@ -10,13 +10,45 @@ profit_model
 
 ##Do a simple informal sensitivity analysis of almond yield profit using at least 2 parameters
 ```{r}
+profit = rnorm(mean=0.6, sd = 0.1, n=20) #creating a normal distribution
+sensi_almond = profit %>% map(~profit_model( area=0.1, solar=sierraczosolar, clr="green", eunit="W", g=FALSE, etype="direct", profit=.x )) 
+
+
+# this is pretty messy - but we can extract a useful data structure,lets say we want 
+# just the annual data (not the mean annual time series), and then reformat as a data frame with nice column names
+tmp = map_df(sensi_almond,`[`, c("annual")) 
+
+site2df = data.frame(year = tmp$annual$year, profit= tmp$annual$elect)
 
 ```
 
 ##Create 2 graphs of the results - you can decide what is the most meaningful graph 
 
 ```{r}
+# now we could plot
+ggplot(site2df, aes(year,elect, group=year ))+geom_boxplot()+labs(y="Electricity generated in W")
 
+# we also might want an average across parameter uncertainty
+site2_average = site2df %>% group_by(year) %>% dplyr::summarize(elect=mean(elect))
+
+# now add this to the plot - note that we remove the grouping by using group=1
+ggplot(site2df, aes(year,elect, group=year))+geom_boxplot()+labs(y="Electricity in W")+
+  geom_line(data=site2_average, aes(year, elect, group=1), col="orange")
+
+# we could also plot how the mean annual electricity varies with efficiency (eff from above)
+site2[[1]]
+
+tmp = map_df(site2,`[`, c("mean")) 
+
+# how variable is electricity generation (mean over all time) with uncertainty in solar efficiency
+
+site2_mean = data.frame(eff=eff, elect= tmp)
+ggplot(site2_mean, aes(y=mean))+geom_boxplot()+
+  labs(x="Electricity in W")
+
+# or to see what the sensitivity looks like....what does the relationship look like
+ggplot(site2_mean, aes(eff, mean))+geom_point()+
+  labs(y="Electricity in W", x="Solar Efficiency")
 ```
 
 ```{r}
@@ -25,5 +57,5 @@ profit_model
 
 
 ##Results
-Write a short paragraph (in the Rmarkdown document) to summarize you interpretation of your model results (e.g what do 'take away' from your model and sensitivity analysis)
+Write a short paragraph (in the Rmarkdown document) to summarize interpretation of your model results (e.g what do 'take away' from your model and sensitivity analysis)
 

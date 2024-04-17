@@ -1,6 +1,6 @@
 #Almond Yield Sensitivity 
 
-```{r}
+```{r warning = FALSE, message = FALSE}
 #Load libraries
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -15,17 +15,19 @@ library(ggpubr)
 ```{r}
 source("profit_model.R")
 calculate_almond_profit
+
+clim <- read.table("clim.txt" , header = TRUE)
 ```
 
 ##Do a simple informal sensitivity analysis of almond yield profit using at least 2 parameters
 ```{r}
 cost_per_hectare = rnorm(mean = 100, sd = 5, n = 20) #creating a normal distribution
-sensi_almond = profit %>% map(~calculate_almond_profit(cost_per_hectare = .x, price_per_kg = 200, discount_rate, years)) 
+sensi_almond = cost_per_hectare %>% map(~calculate_almond_profit(cost_per_hectare = .x, price_per_kg = 200, year = 2024)) 
 
 # Create a dataframe of just annual data
 tmp = map_df(sensi_almond,`[`, c("annual")) 
 
-site2df = data.frame(year = tmp$annual$year, profit= tmp$annual$elect) #need to update this with relevant details for profit calc
+almonddf = data.frame(year = tmp$annual$year, profit= tmp$annual$elect) #need to update this with relevant details for profit calc
 
 ```
 

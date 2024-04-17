@@ -19,7 +19,7 @@ almond_yield
 
   
 # Function to calculate almond profit
-calculate_almond_profit <- function(cost_per_hectare = 100, price_per_kg = 200, discount_rate, years) {
+calculate_almond_profit <- function(cost_per_hectare = 100, price_per_kg = 200, year) {
   
   #Compute almond yield
   yield_data <- almond_yield(clim,Tmincoeff1=-0.015, Tmincoeff2=-0.0046, Pcoeff1=-0.07, Pcoeff2=0.0043, intercep=0.28)
@@ -32,13 +32,8 @@ calculate_almond_profit <- function(cost_per_hectare = 100, price_per_kg = 200, 
   
   # Calculate Profit
   profit <- revenue - total_cost
-  
-  # Calculate Net Present Value
-  discount_factors <- (1 + discount_rate)^(-1 * (1:years))
-  discounted_cash_flows <- c(-total_cost, rep(profit, years - 1)) * discount_factors
-  npv <- sum(discounted_cash_flows)
-  
-  return(print(paste0("Profit ($): ", profit,  "NPV ($): ",npv)))
+
+  return(print(paste0("Profit ($): ", profit)))
   
 }
 

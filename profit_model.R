@@ -1,10 +1,10 @@
 #' Almond Profit Function
 #' Computes the almond profit from the almond yield anomoly in response to climate
 
-#' @param  yield_data output from almond_yield function
-#' @param  cost_per_hectare default = 100
-#' @param  price_per_kg default = 200
-#' @param  discount_rate
+#' @param  yield_data yield of almonds in tons/acre
+#' @param  cost_per_hectare cost of almonds per hectare , default = 100
+#' @param  price_per_kg price of almonds per kg
+#' @param  discount_rate 
 #' @param  years 
 #' @return profit, npv 
 #' 

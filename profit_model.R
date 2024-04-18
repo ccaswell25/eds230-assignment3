@@ -14,15 +14,22 @@
 ##Create a function for profit
 
 # Call almond yield function
-source("almond_yield.R")
+source("almond_yield_function.R")
 almond_yield
 
   
 # Function to calculate almond profit
-calculate_almond_profit <- function(cost_per_hectare = 100, price_per_kg = 200, year) {
+calculate_almond_profit <- function(df, 
+                                    t_min_coef_1 = -0.015, 
+                                    t_min_coef_2 = -0.0046, 
+                                    precip_coef_1 = -0.07, 
+                                    precip_coef_2 = 0.0043, 
+                                    intercept = 0.28, cost_per_hectare = 100, price_per_kg = 200, year) {
   
   #Compute almond yield
-  yield_data <- almond_yield(clim,Tmincoeff1=-0.015, Tmincoeff2=-0.0046, Pcoeff1=-0.07, Pcoeff2=0.0043, intercep=0.28)
+  yield_data <- almond_yield(df,Tmincoeff1, Tmincoeff2, Pcoeff1, Pcoeff2, intercept)
+  
+
   
   #Calculate Revenue
   revenue <- yield_data * price_per_kg
@@ -33,7 +40,7 @@ calculate_almond_profit <- function(cost_per_hectare = 100, price_per_kg = 200, 
   # Calculate Profit
   profit <- revenue - total_cost
 
-  return(print(paste0("Profit ($): ", profit)))
+  return(profit)
   
 }
 

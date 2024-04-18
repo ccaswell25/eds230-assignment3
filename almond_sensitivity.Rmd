@@ -19,10 +19,22 @@ calculate_almond_profit
 clim <- read.table("clim.txt" , header = TRUE)
 ```
 
+
+
 ##Do a simple informal sensitivity analysis of almond yield profit using at least 2 parameters
 ```{r}
 cost_per_hectare = rnorm(mean = 100, sd = 5, n = 20) #creating a normal distribution
-sensi_almond = cost_per_hectare %>% map(~calculate_almond_profit(cost_per_hectare = .x, price_per_kg = 200, year = 2024)) 
+# sensi_almond = cost_per_hectare %>% map(~calculate_almond_profit(cost_per_hectare = .x, price_per_kg = 200, year = 1988))
+
+
+# sensi_almond = cost_per_hectare %>% pmap(calculate_almond_profit,
+#                               liast(cost_per_hectare) , price_per_kg = 200,
+#                               year = 1989, df = clim, 
+#                               t_min_coef_1 = -0.015, 
+#                               t_min_coef_2 = -0.0046, 
+#                               precip_coef_1 = -0.07, 
+#                               precip_coef_2 = 0.0043, 
+#                               intercept = 0.28) 
 
 # Create a dataframe of just annual data
 tmp = map_df(sensi_almond,`[`, c("annual")) 

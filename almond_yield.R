@@ -8,7 +8,7 @@
 
 
 #function to calculate almond yield anamoly
-almond_yield = function(df) {
+almond_yield = function(df,Tmincoeff1=-0.015, Tmincoeff2=-0.0046, Pcoeff1=-0.07, Pcoeff2=0.0043, intercept=0.28) {
   
   #group temperatures by year, find min temperature in Febuary for every year
   feb_min_temp <- df %>% 
@@ -23,20 +23,21 @@ almond_yield = function(df) {
     summarize(total_precip = sum(precip))
   
   # almond yield anamoly formula utilizing febuary tempearture values and january precipitation values
-  almond_yield_calculation <- ( -0.015 * feb_min_temp$min_temp - .0046*feb_min_temp$min_temp^2 - .07 * jan_mean_precip$total_precip + .0043 * jan_mean_precip$total_precip^2 + 0.28)
+  almond_yield_calculation <- full_join(feb_min_temp, jan_mean_precip) %>% mutate(almond_yield_calculation =   Tmincoeff1*feb_min_temp + Tmincoeff2*feb_min_temp^2 + Pcoeff1*jan_mean_precip + Pcoeff2*jan_mean_precip^2 + intercept)
+  
+  
+  Tmincoeff1*feb_min_temp + Tmincoeff2*feb_min_temp^2 + Pcoeff1*jan_mean_precip + Pcoeff2*jan_mean_precip^2 + intercept)
   
   #store minimum yield value from almond yield calculation
-  min_yield <- min(almond_yield_calculation)
-  
-  #store maximum yield value from almond yield calculation
-  max_yield <- max(almond_yield_calculation)
-  
-  #store average yield value from almond yield calculation
-  mean_yield <- mean(almond_yield_calculation)
-  
-  #return minimum, maximum, and mean yield values 
-  return(print(paste0("Minimum yield: ", min_yield,  " tons/acre      ",
-                      "Maximum yield: ", max_yield,  " tons/acre        ",
-                      "Mean yield: ", mean_yield,  " tons/acre ")))
+  # min_yield <- min(almond_yield_calculation)
+  # 
+  # #store maximum yield value from almond yield calculation
+  # max_yield <- max(almond_yield_calculation)
+  # 
+  # #store average yield value from almond yield calculation
+  # mean_yield <- mean(almond_yield_calculation)
+  # 
+  # #return minimum, maximum, and mean yield values 
+  return(almond_yield_calculation)
   
 }
